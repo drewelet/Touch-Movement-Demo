@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.AI;
 using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject canvasPrefab;
     public GameObject planePrefab;
+    public NavMeshData navMeshData;
 
     void Start()
     {
@@ -14,7 +16,13 @@ public class GameManager : MonoBehaviour
         Vector3 planeCenterPos = getCenter(planePrefab.transform);
 
         Instantiate(planePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        planePrefab.AddComponent<UnityEngine.AI.NavMeshSurface>();
+        NavMesh.AddNavMeshData(navMeshData);
+
+
         Instantiate(canvasPrefab, planeCenterPos, Quaternion.identity);
+
+       // planePrefab.GetComponent<UnityEngine.AI.NavMeshSurface>();
     }
 
     //Get Center Of Plane
