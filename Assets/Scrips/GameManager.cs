@@ -6,23 +6,34 @@ public class GameManager : MonoBehaviour
 {
     public GameObject canvasPrefab;
     public GameObject planePrefab;
+    public GameObject agentPrefab;
+
     public NavMeshData navMeshData;
 
     void Start()
     {
+        
         if (planePrefab == null)
             planePrefab = GameObject.Find("Andres");
 
+        if (planePrefab == null)
+            agentPrefab = GameObject.Find("Agent");
+
         Vector3 planeCenterPos = getCenter(planePrefab.transform);
 
-        Instantiate(planePrefab, new Vector3(0, 0, 0), Quaternion.identity);
-        planePrefab.AddComponent<UnityEngine.AI.NavMeshSurface>();
+
+        GameObject planePrefabInstance = Instantiate(planePrefab, new Vector3(0, 0, 0), Quaternion.identity);
+        planePrefabInstance.AddComponent<UnityEngine.AI.NavMeshSurface>();
         NavMesh.AddNavMeshData(navMeshData);
 
+        Vector3 newAgentPlaneSpawnPosition = new Vector3(transform.position.x, 1, transform.position.z);
+        transform.position = newAgentPlaneSpawnPosition;
+        GameObject agentPrefabInstance = Instantiate(agentPrefab, newAgentPlaneSpawnPosition, Quaternion.identity);
+        agentPrefabInstance.AddComponent<UnityEngine.AI.NavMeshAgent>();
+        agentPrefabInstance.AddComponent<AgentMovement>();
 
         Instantiate(canvasPrefab, planeCenterPos, Quaternion.identity);
 
-       // planePrefab.GetComponent<UnityEngine.AI.NavMeshSurface>();
     }
 
     //Get Center Of Plane
